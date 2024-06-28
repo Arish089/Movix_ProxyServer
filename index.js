@@ -2,10 +2,12 @@ const express = require('express')
 const app = express()
 require('dotenv').config()
 const axios = require('axios')
+const cors = require('cors')
 
 const port = process.env.PORT
 console.log(port);
 app.use(express.json())
+app.use(cors())
 
 const baseurl = 'https://api.themoviedb.org/3'
 
