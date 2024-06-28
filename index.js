@@ -21,7 +21,7 @@ app.get('/api/data',async (req,res)=>{
             headers:{
               'accept': 'application/json',
               'Authorization':
-              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OWVlY2FjNTNkMWY2NWZlYzJlZmM5MTRhMThmMjYxMiIsInN1YiI6IjY1OWFmODA5MGQxMWYyMDIwMmViMjIyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.VvH2aM_CCdil6AAuu-KU_0CEReTlj7W8y7Mm7G2EaYQ' 
+              `Bearer ${process.env.API_KEY}` 
             }
           })
           res.status(200).send(resp.data)
@@ -42,7 +42,7 @@ app.get('/api/:endpoint',async (req,res)=>{
             url:`/movie/${endpoint}?${queryString}`,
             headers:{
               'accept': 'application/json',
-              'Authorization':`${process.env.API_KEY}` 
+              'Authorization':`Bearer ${process.env.API_KEY}` 
             }
           })
           res.status(200).send(resp.data)
@@ -54,3 +54,5 @@ app.get('/api/:endpoint',async (req,res)=>{
 app.listen(port,()=>{
 console.log('Server is running',port);
 })
+
+//Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OWVlY2FjNTNkMWY2NWZlYzJlZmM5MTRhMThmMjYxMiIsInN1YiI6IjY1OWFmODA5MGQxMWYyMDIwMmViMjIyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.VvH2aM_CCdil6AAuu-KU_0CEReTlj7W8y7Mm7G2EaYQ
