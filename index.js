@@ -31,15 +31,16 @@ app.get('/api/data',async (req,res)=>{
       }
 )
 
-app.get('/api/:endpoint',async (req,res)=>{
-  const {endpoint} = req.params
+app.get('/api/:id',async (req,res)=>{
+  const {id} = req.params
   const query = req.query;  // Extract the query parameters
   const queryString = new URLSearchParams(query).toString();
+  console.log(queryString);
         try {
           const resp = await axios({
             method:'get',
             baseURL:`https://api.themoviedb.org/3`,
-            url:`/movie/${endpoint}?${queryString}`,
+            url:`/movie/${id}?${queryString}`,
             headers:{
               'accept': 'application/json',
               'Authorization':`Bearer ${process.env.API_KEY}` 
