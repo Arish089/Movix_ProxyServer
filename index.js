@@ -34,19 +34,32 @@ app.get('/api/data',async (req,res)=>{
 app.get('/api/:id',async (req,res)=>{
   const {id} = req.params
   const query = req.query;  // Extract the query parameters
+  console.log(query);
   const queryString = new URLSearchParams(query).toString();
-  console.log(queryString);
+  
         try {
-          const resp = await axios({
+          const [resp1,resp2] = await Promise.all([
+             axios({
             method:'get',
             baseURL:`https://api.themoviedb.org/3`,
-            url:`/movie/${id}?${queryString}`,
+            url:`/movie/${id}?language=en-US&append_to_response=videos`,
             headers:{
               'accept': 'application/json',
               'Authorization':`Bearer ${process.env.API_KEY}` 
             }
-          })
-          res.status(200).send(resp.data)
+          }),
+          axios({
+            method:'get',
+            baseURL:`https://api.themoviedb.org/3`,
+            url:`/movie/${id}/credits?language=en-US&append_to_response=videos`,
+            headers:{
+              'accept': 'application/json',
+              'Authorization':`Bearer ${process.env.API_KEY}` 
+            } 
+          })])
+          res.status(200).send({
+            resp1:resp1,
+            resp2:resp2})
         } catch (error) {
           res.status(error.response ? error.response.status: 500).send(error.message)
         }
