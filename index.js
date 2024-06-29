@@ -77,7 +77,7 @@ app.get('/api/tv/:id',async (req,res)=>{
              axios({
             method:'get',
             baseURL:`https://api.themoviedb.org/3`,
-            url:`/movie/${id}?language=en-US`,
+            url:`/tv/${id}?language=en-US`,
             headers:{
               'accept': 'application/json',
               'Authorization':`Bearer ${process.env.API_KEY}` 
@@ -86,14 +86,14 @@ app.get('/api/tv/:id',async (req,res)=>{
           axios({
             method:'get',
             baseURL:`https://api.themoviedb.org/3`,
-            url:`/movie/${id}/credits?language=en-US&append_to_response=videos`,
+            url:`/tv/${id}/credits?language=en-US&append_to_response=videos`,
             headers:{
               'accept': 'application/json',
               'Authorization':`Bearer ${process.env.API_KEY}` 
             } 
           })
         ])
-        console.log(resp1,resp1.data);
+        //console.log(resp1,resp1.data);
           res.status(200).send({
             tv:resp1.data,
             credits:resp2.data})
