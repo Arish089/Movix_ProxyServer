@@ -33,7 +33,7 @@ app.get('/api/data',async (req,res)=>{
 
 app.get('/api/movie/:id',async (req,res)=>{
   const {id} = req.params
-  console.log(id);
+  //console.log(id);
         try {
           const [resp1,resp2] = await Promise.all([
              axios({
@@ -71,7 +71,7 @@ app.get('/api/movie/:id',async (req,res)=>{
 
 app.get('/api/tv/:id',async (req,res)=>{
   const {id} = req.params
-  console.log(id);
+  //console.log(id);
         try {
           const [resp1,resp2] = await Promise.all([
              axios({
@@ -106,6 +106,27 @@ app.get('/api/tv/:id',async (req,res)=>{
         }
       }
 )
+
+app.get('api/search/:searchquery', async (req, res)=>{
+  const {searchquery} = req.params
+  const {page,filter} = req.query
+try {
+  let resp = await axios({
+    method:'get',
+    baseURL: `https://api.themoviedb.org/3`,
+    url:`/search/${filter}?&include_adult=false&language=en-US&page=${page}&query=${searchquery}`,
+    headers:{
+      'accept': 'application/json',
+      'Authorization':`Bearer ${process.env.API_KEY}` 
+    }
+  })
+  res.status(200).send(resp.data)
+} catch (error) {
+  res.status(error.response ? error.response.status: 500).send(error)
+}
+})
+
+
 app.listen(port,()=>{
 console.log('Server is running',port);
 })
