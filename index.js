@@ -5,7 +5,7 @@ const axios = require('axios')
 const cors = require('cors')
 
 const port = process.env.PORT
-console.log(port);
+//console.log(port);
 app.use(express.json())
 app.use(cors())
 //console.log(process.env.API_KEY);
@@ -33,10 +33,7 @@ app.get('/api/data',async (req,res)=>{
 
 app.get('/api/:id',async (req,res)=>{
   const {id} = req.params
-  const query = req.query;  // Extract the query parameters
-  console.log(query);
-  const queryString = new URLSearchParams(query).toString();
-  
+  console.log(id);
         try {
           const [resp1,resp2] = await Promise.all([
              axios({
@@ -56,12 +53,18 @@ app.get('/api/:id',async (req,res)=>{
               'accept': 'application/json',
               'Authorization':`Bearer ${process.env.API_KEY}` 
             } 
-          })])
+          })
+        ])
+        console.log(resp1,resp1.data);
           res.status(200).send({
-            resp1:resp1,
-            resp2:resp2})
+            resp1:resp1.data,
+            resp2:resp2.data})
         } catch (error) {
-          res.status(error.response ? error.response.status: 500).send(error.message)
+          console.error('error fetching movie data',error.message)
+          res.status(error.response ? error.response.status: 500).send({
+            message: error.message,
+      status: error.response ? error.response.status : 500
+          })
         }
       }
 )
