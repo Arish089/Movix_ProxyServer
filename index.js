@@ -128,6 +128,30 @@ try {
 })
 
 
+app.get('/api/anime', async (req, res)=>{
+  const {page, sort_by ,with_origin_country}=req.query
+  try {
+    let resp = await axios({
+      method:'get',
+      baseURL:`https://api.themoviedb.org/3`,
+      url:`/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&with_genres=16`,
+      headers:{
+        'accept': 'application/json',
+        'Authorization':
+        `Bearer ${process.env.API_KEY}` 
+      },
+      params:{
+        page: page,
+        sort_by: sort_by,
+        with_origin_country: with_origin_country
+      }
+    })
+    res.status(200).send(resp.data)
+  } catch (error) {
+    res.status(error.response ? error.response.status: 500).send(error)
+  }
+})
+
 app.listen(port,()=>{
 console.log('Server is running',port);
 })
