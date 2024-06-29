@@ -57,8 +57,8 @@ app.get('/api/:id',async (req,res)=>{
         ])
         console.log(resp1,resp1.data);
           res.status(200).send({
-            resp1:resp1.data,
-            resp2:resp2.data})
+            movie:resp1.data,
+            credits:resp2.data})
         } catch (error) {
           console.error('error fetching movie data',error.message)
           res.status(error.response ? error.response.status: 500).send({
