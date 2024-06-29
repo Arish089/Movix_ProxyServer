@@ -107,9 +107,9 @@ app.get('/api/tv/:id',async (req,res)=>{
       }
 )
 
-app.get('api/search/:searchquery', async (req, res)=>{
-  const {searchquery} = req.params
-  const {page,filter} = req.query
+app.get('api/search', async (req, res)=>{
+  const {page,searchquery,filter} = req.query
+  console.log(page,searchquery);
 try {
   let resp = await axios({
     method:'get',
