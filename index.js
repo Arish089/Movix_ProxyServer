@@ -107,7 +107,7 @@ app.get('/api/tv/:id',async (req,res)=>{
       }
 )
 
-app.get('api/search', async (req, res)=>{
+app.get('/api/search', async (req, res)=>{
   const {page,searchquery,filter} = req.query
   console.log(page,searchquery);
 try {
