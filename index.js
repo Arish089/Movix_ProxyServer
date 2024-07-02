@@ -1,159 +1,26 @@
 const express = require('express')
 const app = express()
-require('dotenv').config()
 const axios = require('axios')
 const cors = require('cors')
+const DbConnection = require('./config/db')
+const UserRouter = require('./routes/user.routes')
+const ProxyRouter = require('./routes/proxy.routes')
+
+
+require('dotenv').config()
 
 const port = process.env.PORT
-//console.log(port);
+
 app.use(express.json())
 app.use(cors())
-//console.log(process.env.API_KEY);
-const baseurl = 'https://api.themoviedb.org/3'
 
-app.get('/api/data',async (req,res)=>{
-  const {url} = req.query
-        try {
-          const resp = await axios({
-            method:'get',
-            baseURL: baseurl,
-            url: url,
-            headers:{
-              'accept': 'application/json',
-              'Authorization':
-              `Bearer ${process.env.API_KEY}` 
-            }
-          })
-          res.status(200).send(resp.data)
-        } catch (error) {
-          res.status(error.response ? error.response.status: 500).send(error.message)
-        }
-      }
-)
+app.use('/api',ProxyRouter)
 
-app.get('/api/movie/:id',async (req,res)=>{
-  const {id} = req.params
-  //console.log(id);
-        try {
-          const [resp1,resp2] = await Promise.all([
-             axios({
-            method:'get',
-            baseURL:`https://api.themoviedb.org/3`,
-            url:`/movie/${id}?language=en-US&append_to_response=videos`,
-            headers:{
-              'accept': 'application/json',
-              'Authorization':`Bearer ${process.env.API_KEY}` 
-            }
-          }),
-          axios({
-            method:'get',
-            baseURL:`https://api.themoviedb.org/3`,
-            url:`/movie/${id}/credits?language=en-US&append_to_response=videos`,
-            headers:{
-              'accept': 'application/json',
-              'Authorization':`Bearer ${process.env.API_KEY}` 
-            } 
-          })
-        ])
-        console.log(resp1,resp1.data);
-          res.status(200).send({
-            movie:resp1.data,
-            credits:resp2.data})
-        } catch (error) {
-          console.error('error fetching movie data',error.message)
-          res.status(error.response ? error.response.status: 500).send({
-            message: error.message,
-      status: error.response ? error.response.status : 500
-          })
-        }
-      }
-)
+app.use('/user',UserRouter)
 
-app.get('/api/tv/:id',async (req,res)=>{
-  const {id} = req.params
-  //console.log(id);
-        try {
-          const [resp1,resp2] = await Promise.all([
-             axios({
-            method:'get',
-            baseURL:`https://api.themoviedb.org/3`,
-            url:`/tv/${id}?language=en-US`,
-            headers:{
-              'accept': 'application/json',
-              'Authorization':`Bearer ${process.env.API_KEY}` 
-            }
-          }),
-          axios({
-            method:'get',
-            baseURL:`https://api.themoviedb.org/3`,
-            url:`/tv/${id}/credits?language=en-US&append_to_response=videos`,
-            headers:{
-              'accept': 'application/json',
-              'Authorization':`Bearer ${process.env.API_KEY}` 
-            } 
-          })
-        ])
-        //console.log(resp1,resp1.data);
-          res.status(200).send({
-            tv:resp1.data,
-            credits:resp2.data})
-        } catch (error) {
-          console.error('error fetching movie data',error.message)
-          res.status(error.response ? error.response.status: 500).send({
-            message: error.message,
-      status: error.response ? error.response.status : 500
-          })
-        }
-      }
-)
-
-app.get('/api/search/:searchquery', async (req, res)=>{
-  const {searchquery} = req.params
-  const {page,filter} = req.query
-  console.log(page,searchquery);
-try {
-  let resp = await axios({
-    method:'get',
-    baseURL: `https://api.themoviedb.org/3`,
-    url:`/search/${filter}?&include_adult=false&language=en-US&page=${page}&query=${searchquery}`,
-    headers:{
-      'accept': 'application/json',
-      'Authorization':`Bearer ${process.env.API_KEY}` 
-    }
-  })
-  res.status(200).send(resp.data)
-} catch (error) {
-  res.status(error.response ? error.response.status: 500).send(error)
-}
-})
-
-
-app.get('/api/anime', async (req, res)=>{
-  const {page, sort_by ,with_origin_country}=req.query
-  try {
-    let resp = await axios({
-      method:'get',
-      baseURL:`https://api.themoviedb.org/3`,
-      url:`/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&with_genres=16`,
-      headers:{
-        'accept': 'application/json',
-        'Authorization':
-        `Bearer ${process.env.API_KEY}` 
-      },
-      params:{
-        page: page,
-        sort_by: sort_by,
-        with_origin_country: with_origin_country
-      }
-    })
-    res.status(200).send(resp.data)
-  } catch (error) {
-    res.status(error.response ? error.response.status: 500).send(error)
-  }
-})
-
-app.listen(port,()=>{
+app.listen(port,async()=>{
+await DbConnection(process.env.DB_URL)
 console.log('Server is running',port);
+console.log('Connected to database');
 })
 
-//Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OWVlY2FjNTNkMWY2NWZlYzJlZmM5MTRhMThmMjYxMiIsInN1YiI6IjY1OWFmODA5MGQxMWYyMDIwMmViMjIyMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.VvH2aM_CCdil6AAuu-KU_0CEReTlj7W8y7Mm7G2EaYQ
