@@ -50,7 +50,7 @@ ProxyRouter.get('/movie/:id',async (req,res)=>{
             } 
           })
         ])
-        console.log(resp1,resp1.data);
+       // console.log(resp1,resp1.data);
           res.status(200).send({
             movie:resp1.data,
             credits:resp2.data})
