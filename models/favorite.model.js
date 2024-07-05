@@ -1,10 +1,11 @@
 const mongoose = require('mongoose')
 
-const FavoriteSchema = new mongoose.Schema({
-    name:{type: String, required: true},
-    content_id :{type:Number}
+const FavoriteListSchema = new mongoose.Schema({
+    profile_id:{type:String, required:true},
+    content_id:{type:Number, required:true,unique:true},
+    mediaType:{type:String,required:true},
+    title:{type:String, required:true}
 })
 
-const FavoriteModel = mongoose.model('Favorite',FavoriteSchema)
-
-module.exports = FavoriteModel
+const FavoriteListModel = mongoose.model('favorite',FavoriteListSchema)
+module.exports = FavoriteListModel
