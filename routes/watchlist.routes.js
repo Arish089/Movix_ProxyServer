@@ -34,7 +34,7 @@ WatchlistRouter.post('/list',async(req, res)=>{
                 
             } catch (error) {
                 if (error.code === 11000) {
-                    res.status(400).send('This item is already in the watchlist for this user.');
+                    res.status(400).send(`This item is already in the watchlist for this ${ActiveUser }.`);
                 } else {
                     res.status(500).send(`An error occurred: ${error.message}`);
                 }
