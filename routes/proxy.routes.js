@@ -105,7 +105,6 @@ ProxyRouter.get('/tv/:id',async (req,res)=>{
 ProxyRouter.get('/search/:searchquery', async (req, res)=>{
   const {searchquery} = req.params
   const {page,filter} = req.query
-  console.log(page,searchquery);
 try {
   let resp = await axios({
     method:'get',

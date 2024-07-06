@@ -8,10 +8,8 @@ const WatchlistRouter = express.Router()
 
 WatchlistRouter.get('/', async(req, res)=>{
     const {user} = req.query
-    console.log(user);
     try {
         const foundUser = await UserModel.findOne({ email: user });
-        console.log(foundUser);
         if (foundUser) {
             const watchlist = await WatchListModel.find({ profile_id: foundUser._id });
             res.status(200).json(watchlist);
@@ -35,7 +33,11 @@ WatchlistRouter.post('/list',async(req, res)=>{
                 res.status(200).send('Added to Watchlist successfully')
                 
             } catch (error) {
-                res.status(500).send({message:error.message})
+                if (error.code === 11000) {
+                    res.status(400).send('This item is already in the watchlist for this user.');
+                } else {
+                    res.status(500).send(`An error occurred: ${error.message}`);
+                }
             }
         }else{
             res.status(400).send('You are not logged in to access this feature')

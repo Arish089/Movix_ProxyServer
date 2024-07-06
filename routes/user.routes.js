@@ -17,10 +17,8 @@ UserRouter.post('/signup',async (req,res)=>{
 
 UserRouter.post('/login',async (req,res)=>{
     const {email,name} = req.body
-    console.log(email,name);
     try {
         const user = await UserModel.findOne({email})
-        console.log(user);
         if(!user){
             const newUser = new UserModel({email,name})
             await UserModel.create(newUser)

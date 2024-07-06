@@ -8,10 +8,8 @@ const FavoriteRouter = express.Router()
 
 FavoriteRouter.get('/', async(req, res)=>{
     const {user} = req.query
-    console.log(user);
     try {
         const foundUser = await UserModel.findOne({ email: user });
-        console.log(foundUser);
         if (foundUser) {
             const favorite = await FavoriteListModel.find({ profile_id: foundUser._id });
             res.status(200).json(favorite);
