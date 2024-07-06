@@ -8,7 +8,7 @@ const WatchlistSchema = new mongoose.Schema({
     title:{type:String, required:true}
 })
 
-WatchlistSchema.index({ profile_id: 1, content_id: 1 });
+WatchlistSchema.index({ profile_id: 1, content_id: 1 },{unique: true});
 
 const WatchListModel = mongoose.model('watchlist',WatchlistSchema)
 
