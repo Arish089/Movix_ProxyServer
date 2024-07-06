@@ -3,7 +3,7 @@ const {ObjectId} = mongoose.Schema.Types
 
 const WatchlistSchema = new mongoose.Schema({
     profile_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref:'user'},
-    content_id:{type:String, required:true},
+    content_id:{type:Number, required:true},
     mediaType:{type:String,required:true},
     title:{type:String, required:true}
 })
