@@ -47,4 +47,18 @@ FavoriteRouter.post('/list', async (req, res) => {
     }
 });
 
+FavoriteRouter.delete('/delete/:id', async(req, res)=>{
+    const {id} = req.params
+    try {
+        const item = await FavoriteListModel.findByIdAndDelete({_id:id})
+        if (item.deletedCount === 0) {
+            res.status(404).send('Item not found in favorites');
+        } else {
+            res.status(200).send('Item removed from favorites successfully');
+        }
+    } catch (error) {
+        res.status(500).send({message:error.message})
+    }
+})
+
 module.exports = FavoriteRouter;
